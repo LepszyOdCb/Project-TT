@@ -4,7 +4,7 @@ import pygame
 run = True
 map_size = 64
 map_data = []
-window_width = 1024 + 128
+window_width = 1024 + 128 + 128
 window_height = 960 + 32
 cell_size = 32
 max_cell_displayed = 32 - 1
