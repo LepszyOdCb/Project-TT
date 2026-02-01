@@ -1,10 +1,11 @@
 import pygame
+import random
 
 # Constants
 run = True
-map_size = 64
+map_size = 128
 map_data = []
-window_width = 1024 + 128 + 128
+window_width = 1024 + 128 + 128 - 32
 window_height = 960 + 32
 cell_size = 32
 max_cell_displayed = 32 - 1
@@ -19,17 +20,34 @@ pygame.display.set_caption("T1")
 font = pygame.font.SysFont(None, 16)
 clock = pygame.time.Clock()
 
+# Map idxing
+# 0 - empty
+# 1 - city_center
+# 2 - road
+
 # Functions
 def map_gen(size):
-    result = []
-    center = size // 2
-    for y in range(size):
-        row = []
-        for x in range(size):
-            value = max(abs(x - center), abs(y - center))
-            row.append(value)
-        result.append(row)
-    return result
+    map = [[0 for _ in range(size)] for _ in range(size)]
+
+    # Main city
+    x = random.randint(size // 2 - size // 4, size // 2 + size // 4)
+    y = random.randint(size // 2 - size // 4, size // 2 + size // 4)
+    
+    for i in (-1, 0, 1):
+        for j in (-1, 0, 1):
+            map[x + i][y + j] = 1
+
+    # City
+    for i in range((size//64)**2):
+        x = random.randint(size // 2 - size // 6, size // 2 + size // 6)
+        y = random.randint(size // 2 - size // 6, size // 2 + size // 6)
+        
+        for i in (-1, 0):
+            for j in (-1, 0):
+                map[x + i][y + j] = 1
+
+    # Vilage
+    return map
 
 # Initialize map
 map_data = map_gen(map_size)
@@ -85,6 +103,20 @@ while run:
                             y * cell_size + cell_size // 2)
                 )
                 screen.blit(text, text_rect)
+
+    # Draw menu
+    pygame.draw.line(
+        screen, (0, 0, 0),
+        (1056 + 64, 0),
+        (1056 + 64, window_height)
+    )
+
+    for x in range(window_height // 64):
+        pygame.draw.line(
+            screen, (0, 0, 0),
+            (1056 - 128, x * 64),
+            (window_width, x * 64)
+        )
 
     pygame.display.flip()
     clock.tick(60)
