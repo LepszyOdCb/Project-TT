@@ -15,6 +15,7 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 white = (255, 255, 255)
 black = (0, 0, 0)
+purple = (255, 0, 255)
 
 # Camera starts in center
 cam_pos = [map_size // 4 + 1, map_size // 4 + 1]
@@ -58,6 +59,23 @@ def map_gen(size):
             map[x + i][y + j] = 2
     map[x - 1][y - 1] = 1
 
+    map[x - 2][y - 2] = 3
+    map[x - 2][y + 2] = 3
+    map[x + 2][y - 2] = 3
+    map[x + 2][y + 2] = 3
+    map[x][y - 2] = 3
+    map[x][y + 2] = 3
+    map[x - 2][y] = 3
+    map[x + 2][y] = 3
+    map[x + 1][y - 2] = 3
+    map[x - 1][y + 2] = 3
+    map[x - 2][y + 1] = 3
+    map[x + 2][y - 1] = 3
+    map[x + 1][y + 2] = 3
+    map[x - 1][y - 2] = 3
+    map[x - 2][y - 1] = 3
+    map[x + 2][y + 1] = 3
+
     # Cities
     for _ in range((size // 64) ** 2):
         while True:
@@ -74,6 +92,46 @@ def map_gen(size):
                 map[x + i][y + j] = 2
         map[x][y] = 1
 
+        # Side choises
+        # 1 - down right
+        # 2 - right up down
+        # 3 - left up
+        # 4 - left up
+        side = random.randint(1, 4)
+        if side == 1:
+            map[x + 1][y + 2] = 3
+            map[x + 2][y + 1] = 3
+            map[x + 2][y + 2] = 3
+            map[x + 2][y] = 3
+            map[x + 2][y - 1] = 3
+            map[x + 2][y - 2] = 3
+        elif side == 2:
+            map[x + 2][y + 1] = 3
+            map[x + 1][y + 2] = 3
+            map[x][y + 2] = 3
+            map[x - 1][y + 2] = 3
+            map[x + 2][y + 2] = 3
+            map[x - 1][y + 1] = 3
+        elif side == 3:
+            map[x][y - 1] = 3
+            map[x - 1][y] = 3
+            map[x - 1][y - 1] = 3
+            map[x - 1][y - 1] = 3
+            map[x - 1][y] = 3
+            map[x - 1][y + 1] = 3
+            map[x + 1][y - 1] = 3
+        elif side == 4:
+            map[x - 1][y - 1] = 3
+            map[x - 0][y - 1] = 3
+            map[x - 1][y - 1] = 3
+            map[x + 1][y - 1] = 3
+            map[x + 1][y - 1] = 3   
+            map[x - 1][y] = 3
+            map[x - 1][y + 1] = 3
+            map[x - 1][y + 2] = 3
+
+    
+
     # Vilages
     for _ in range((size // 32) ** 2):
         while True:
@@ -85,6 +143,26 @@ def map_gen(size):
 
         cities_cords.append((x, y))
         map[x][y] = 1
+
+        # Side choises
+        # 1 - up
+        # 2 - right
+        # 3 - down
+        # 4 - left
+        side = random.randint(1, 4)
+        if side == 1:
+            for i in (-1, 0, 1):
+                map[x - 1][y + i] = 3
+        elif side == 2:
+            for i in (-1, 0, 1):
+                map[x + i][y + 1] = 3
+        elif side == 3:
+            for i in (-1, 0, 1):
+                map[x + 1][y + i] = 3
+        elif side == 4:
+            for i in (-1, 0, 1):
+                map[x + i][y - 1] = 3
+
 
     return map, cities_cords
 
@@ -99,6 +177,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
+        # Camera movement
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 cam_pos[1] -= 1
@@ -109,16 +188,19 @@ while run:
             if event.key == pygame.K_d:
                 cam_pos[0] += 1
 
+    # Clamp camera
     cam_pos[0] = max(0, min(cam_pos[0], map_size - max_cell_displayed))
     cam_pos[1] = max(0, min(cam_pos[1], map_size - max_cell_displayed))
 
     screen.fill((250, 250, 250))
 
+    # Draw grid
     for i in range(max_cell_displayed + 1):
         offset = cell_size * i
         pygame.draw.line(screen, black, (offset, 0), (offset, max_cell_displayed * cell_size))
         pygame.draw.line(screen, black, (0, offset), (max_cell_displayed * cell_size, offset))
 
+    # Draw map
     for x in range(max_cell_displayed):
         for y in range(max_cell_displayed):
             map_x = x + cam_pos[0]
@@ -131,6 +213,8 @@ while run:
                     color = blue
                 elif value == 2:
                     color = red
+                elif value == 3:
+                    color = green
                 else:
                     color = black
 
@@ -139,6 +223,20 @@ while run:
                     text,
                     (x * cell_size + cell_size // 2, y * cell_size + cell_size // 2)
                 )
+    
+    # Draw menu
+    pygame.draw.line(
+        screen, (0, 0, 0),
+        (1056 + 64, 0),
+        (1056 + 64, window_height)
+    )
+
+    for x in range(window_height // 64):
+        pygame.draw.line(
+            screen, (0, 0, 0),
+            (1056 - 128, x * 64),
+            (window_width, x * 64)
+        )
 
     pygame.display.flip()
     clock.tick(60)
