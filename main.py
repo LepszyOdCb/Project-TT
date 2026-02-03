@@ -76,6 +76,26 @@ def map_gen(size):
     map[x - 2][y - 1] = 3
     map[x + 2][y + 1] = 3
 
+    map[x - 3][y - 2] = 3
+    map[x - 2][y - 3] = 3
+    map[x + 2][y - 3] = 3
+    map[x + 3][y - 2] = 3
+    map[x - 4][y - 2] = 3
+    map[x + 4][y - 2] = 3
+    map[x - 3][y + 2] = 3
+    map[x + 3][y + 2] = 3
+    
+    map[x - 2][y + 3] = 3
+    map[x + 2][y + 3] = 3
+    map[x - 4][y + 2] = 3
+    map[x + 4][y + 2] = 3
+    map[x - 2][y - 4] = 3
+    map[x + 2][y - 4] = 3
+    
+
+
+    
+
     # Cities
     for _ in range((size // 64) ** 2):
         while True:
