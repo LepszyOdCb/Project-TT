@@ -32,6 +32,7 @@ clock = pygame.time.Clock()
 # 1 - city_center
 # 2 - city_center_border
 # 3 - road
+# 4 - house
 
 # Functions
 def far_enough(x, y, cities, min_dist):
@@ -40,6 +41,14 @@ def far_enough(x, y, cities, min_dist):
             return False
     return True
 
+# Init House generator
+def house_gen(map, x, y):
+    if map[x][y] == 3:
+        for i in (-1, 0, 1):
+            for j in (-1, 0, 1):
+                if random.randint(0, 4) == 0 and map[x + i][y + j] == 0:
+                    map[x + i][y + j] = 4
+    return map
 
 def map_gen(size):
     map = [[0 for _ in range(size)] for _ in range(size)]
@@ -91,6 +100,8 @@ def map_gen(size):
     map[x + 4][y + 2] = 3
     map[x - 2][y - 4] = 3
     map[x + 2][y - 4] = 3
+
+    
     
     # Cities
     for _ in range((size // 64) ** 2):
@@ -146,8 +157,6 @@ def map_gen(size):
             map[x - 1][y + 1] = 3
             map[x - 1][y + 2] = 3
 
-    
-
     # Vilages
     for _ in range((size // 32) ** 2):
         while True:
@@ -179,13 +188,16 @@ def map_gen(size):
             for i in (-1, 0, 1):
                 map[x + i][y - 1] = 3
 
-
     return map, cities_cords
-
 
 # Initialize map
 map_data, cities_cords = map_gen(map_size)
 print(cities_cords)
+
+for i in range(map_size):
+    for j in range(map_size):
+        if map_data[i][j] == 3:
+            map_data = house_gen(map_data, i, j)
 
 # Main loop
 while run:
@@ -231,6 +243,8 @@ while run:
                     color = red
                 elif value == 3:
                     color = green
+                elif value == 4:
+                    color = purple
                 else:
                     color = black
 
