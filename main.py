@@ -18,6 +18,7 @@ black = (0, 0, 0)
 purple = (255, 0, 255)
 
 menu = [("Road", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"), ("Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty")]
+selection = None
 
 # Camera starts in center
 cam_pos = [map_size // 4 + 1, map_size // 4 + 1]
@@ -229,7 +230,7 @@ while run:
         pygame.draw.line(screen, black, (offset, 0), (offset, max_cell_displayed * cell_size))
         pygame.draw.line(screen, black, (0, offset), (max_cell_displayed * cell_size, offset))
 
-    # Draw map
+    # Map
     for x in range(max_cell_displayed):
         for y in range(max_cell_displayed):
             map_x = x + cam_pos[0]
@@ -255,7 +256,17 @@ while run:
                     (x * cell_size + cell_size // 2, y * cell_size + cell_size // 2)
                 )
     
-    # Draw minimap
+    for x in range(max_cell_displayed):
+        for y in range(max_cell_displayed):
+            mouse_pos = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if x * cell_size <= mouse_pos[0] <= x * cell_size + cell_size and y * cell_size <= mouse_pos[1] <= y * cell_size + cell_size:
+                        map_x = x + cam_pos[0]
+                        map_y = y + cam_pos[1]
+                        if selection == "Road" and map_data[map_y][map_x] == 0:
+                            map_data[map_y][map_x] = 3
+    # Minimap
     for x in range(map_size):
         for y in range(map_size):
             pygame.draw.rect(
@@ -285,7 +296,7 @@ while run:
         2
     )
 
-    # Draw menu
+    # Menu
     pygame.draw.line(
         screen, (0, 0, 0),
         (1056 + 64, 0),
@@ -305,7 +316,8 @@ while run:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if x <= mouse_pos[0] <= x + 16 * 4 * 2 and y <= mouse_pos[1] <= y + 16 * 2 * 2:
-                        print(menu[x // 128 - 7][y // 64 - 4])
+                        selection = menu[x // 128 - 7][y // 64 - 4]
+                        print(selection)
 
     pygame.display.flip()
     clock.tick(60)
