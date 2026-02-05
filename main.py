@@ -41,7 +41,6 @@ def far_enough(x, y, cities, min_dist):
             return False
     return True
 
-# Init House generator
 def house_gen(map, x, y):
     if map[x][y] == 3:
         for i in ((-1, 0), (1, 0), (0, -1), (0, 1)):
@@ -55,7 +54,7 @@ def map_gen(size):
 
     # Capital
     while True:
-        x = random.randint(size // 2 - size // 4, size // 2 + size // 4)
+        x = random.randint((map_size // 2) - (map_size // 32), (map_size // 2) + (map_size // 32))
         y = random.randint(size // 2 - size // 4, size // 2 + size // 4)
         if far_enough(x, y, cities_cords, 16):
             break
@@ -253,6 +252,24 @@ while run:
                     (x * cell_size + cell_size // 2, y * cell_size + cell_size // 2)
                 )
     
+    # Draw minimap
+    for x in range(map_size):
+        for y in range(map_size):
+            pygame.draw.rect(
+                screen,
+                (200, 200, 200) if map_data[y][x] == 0 else
+                (0, 0, 255) if map_data[y][x] == 1 else
+                (255, 0, 0) if map_data[y][x] == 2 else
+                (0, 255, 0) if map_data[y][x] == 3 else
+                (255, 0, 255),
+                (
+                    1056 + x * 2 - 63,
+                    y * 2,
+                    2,
+                    2
+                )
+            )
+            
     # Draw menu
     pygame.draw.line(
         screen, (0, 0, 0),
