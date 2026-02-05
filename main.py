@@ -44,10 +44,9 @@ def far_enough(x, y, cities, min_dist):
 # Init House generator
 def house_gen(map, x, y):
     if map[x][y] == 3:
-        for i in (-1, 0, 1):
-            for j in (-1, 0, 1):
-                if random.randint(0, 4) == 0 and map[x + i][y + j] == 0:
-                    map[x + i][y + j] = 4
+        for i in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+            if random.randint(0, 3) == 0 and map[x + i[0]][y + i[1]] == 0:
+                map[x + i[0]][y + i[1]] = 4
     return map
 
 def map_gen(size):
@@ -261,7 +260,7 @@ while run:
         (1056 + 64, window_height)
     )
 
-    for x in range(window_height // 64):
+    for x in range(3, window_height // 64):
         pygame.draw.line(
             screen, (0, 0, 0),
             (1056 - 128, x * 64),
