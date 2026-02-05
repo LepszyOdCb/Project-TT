@@ -54,8 +54,8 @@ def map_gen(size):
 
     # Capital
     while True:
-        x = random.randint((map_size // 2) - (map_size // 32), (map_size // 2) + (map_size // 32))
-        y = random.randint(size // 2 - size // 4, size // 2 + size // 4)
+        x = random.randint((map_size // 2) - (map_size // 16), (map_size // 2) + (map_size // 16))
+        y = random.randint((map_size // 2) - (map_size // 16), (map_size // 2) + (map_size // 16))
         if far_enough(x, y, cities_cords, 16):
             break
 
@@ -104,8 +104,8 @@ def map_gen(size):
     # Cities
     for _ in range((size // 64) ** 2):
         while True:
-            x = random.randint(size // 2 - size // 6, size // 2 + size // 6)
-            y = random.randint(size // 2 - size // 6, size // 2 + size // 6)
+            x = random.randint((map_size // 2) - (map_size // 8), (map_size // 2) + (map_size // 8))
+            y = random.randint((map_size // 2) - (map_size // 8), (map_size // 2) + (map_size // 8))
 
             if far_enough(x, y, cities_cords, 9):
                 break
@@ -158,8 +158,8 @@ def map_gen(size):
     # Vilages
     for _ in range((size // 32) ** 2):
         while True:
-            x = random.randint(size // 4 - size // 8, size // 4 + size // 8)
-            y = random.randint(size // 4 - size // 8, size // 4 + size // 8)
+            x = random.randint(16, map_size - 15)
+            y = random.randint(16, map_size - 15)
 
             if far_enough(x, y, cities_cords, 6):
                 break
@@ -172,6 +172,7 @@ def map_gen(size):
         # 2 - right
         # 3 - down
         # 4 - left
+
         side = random.randint(1, 4)
         if side == 1:
             for i in (-1, 0, 1):
