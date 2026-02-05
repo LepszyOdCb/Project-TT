@@ -17,6 +17,8 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 purple = (255, 0, 255)
 
+menu = [("Road", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"), ("Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty")]
+
 # Camera starts in center
 cam_pos = [map_size // 4 + 1, map_size // 4 + 1]
 
@@ -214,9 +216,7 @@ while run:
                 cam_pos[0] -= 1
             if event.key == pygame.K_d:
                 cam_pos[0] += 1
-        #if event.type == pygame.mouse.get_pressed()[1]:
-        #    print("XD")
-
+        
     # Clamp camera
     cam_pos[0] = max(0, min(cam_pos[0], map_size - max_cell_displayed))
     cam_pos[1] = max(0, min(cam_pos[1], map_size - max_cell_displayed))
@@ -292,12 +292,20 @@ while run:
         (1056 + 64, window_height)
     )
 
-    for x in range(3, window_height // 64):
+    for x in range(4, window_height // 64):
         pygame.draw.line(
             screen, (0, 0, 0),
             (1056 - 128, x * 64),
             (window_width, x * 64)
         )    
+
+    for x in range(992, 1250, 32 * 2 * 2):
+       for y in range(256, 992, 32 * 2):     
+            mouse_pos = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if x <= mouse_pos[0] <= x + 16 * 4 * 2 and y <= mouse_pos[1] <= y + 16 * 2 * 2:
+                        print(menu[x // 128 - 7][y // 64 - 4])
 
     pygame.display.flip()
     clock.tick(60)
