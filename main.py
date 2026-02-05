@@ -262,7 +262,7 @@ while run:
                 (0, 0, 255) if map_data[y][x] == 1 else
                 (255, 0, 0) if map_data[y][x] == 2 else
                 (0, 255, 0) if map_data[y][x] == 3 else
-                (255, 0, 255),
+                (255, 255, 255),
                 (
                     1056 + x * 2 - 63,
                     y * 2,
@@ -270,7 +270,19 @@ while run:
                     2
                 )
             )
-            
+
+    pygame.draw.rect(
+        screen,
+        (0, 0, 0),
+        (
+            1056 + cam_pos[0] * 2 - 63,
+            cam_pos[1] * 2,
+            max_cell_displayed * 2,
+            max_cell_displayed * 2
+        ),
+        2
+    )
+
     # Draw menu
     pygame.draw.line(
         screen, (0, 0, 0),
