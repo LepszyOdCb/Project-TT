@@ -214,8 +214,8 @@ while run:
                 cam_pos[0] -= 1
             if event.key == pygame.K_d:
                 cam_pos[0] += 1
-        if event.type == pygame.mouse.get_pressed()[1]:
-            print("XD")
+        #if event.type == pygame.mouse.get_pressed()[1]:
+        #    print("XD")
 
     # Clamp camera
     cam_pos[0] = max(0, min(cam_pos[0], map_size - max_cell_displayed))
