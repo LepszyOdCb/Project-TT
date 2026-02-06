@@ -268,6 +268,17 @@ while run:
                             map_data[map_y][map_x] = 3
                         if selection == "Demolish" and map_data[map_y][map_x] == 3:
                             map_data[map_y][map_x] = 0
+
+            if map_data[y + cam_pos[1]][x + cam_pos[0]] == 3:
+                for i in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                    if map_data[y + cam_pos[1] + i[1]][x + cam_pos[0] + i[0]] == 3:
+                        pygame.draw.line(
+                            screen,
+                            (0, 255, 0),
+                            (x * cell_size + cell_size // 2, y * cell_size + cell_size // 2),
+                            ((x+i[1]) * cell_size + cell_size // 2, (y+i[0]) * cell_size + cell_size // 2),
+                            2
+                            )
     # Minimap
     for x in range(map_size):
         for y in range(map_size):
