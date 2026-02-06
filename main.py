@@ -17,7 +17,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 purple = (255, 0, 255)
 
-menu = [("Road", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"), ("Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty")]
+menu = [("Road", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"), ("Demolish", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty")]
 selection = None
 
 # Camera starts in center
@@ -266,6 +266,8 @@ while run:
                         map_y = y + cam_pos[1]
                         if selection == "Road" and map_data[map_y][map_x] == 0:
                             map_data[map_y][map_x] = 3
+                        if selection == "Demolish" and map_data[map_y][map_x] == 3:
+                            map_data[map_y][map_x] = 0
     # Minimap
     for x in range(map_size):
         for y in range(map_size):
