@@ -9,6 +9,8 @@ window_width = 1024 + 128 + 128 - 32
 window_height = 960 + 32
 cell_size = 32
 max_cell_displayed = 32 - 1
+bus_stop_name = [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]
+idx = 0
 
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -17,7 +19,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 purple = (255, 0, 255)
 
-menu = [("Road", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"), ("Demolish", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty")]
+menu = [("Road", "Bus", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty"), ("Demolish", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty", "Empty")]
 selection = None
 
 # Camera starts in center
@@ -268,17 +270,19 @@ while run:
                             map_data[map_y][map_x] = 3
                         if selection == "Demolish" and map_data[map_y][map_x] == 3:
                             map_data[map_y][map_x] = 0
+                        if selection == "Bus" and map_data[map_y][map_x] == 3:
+                            map_data[map_y][map_x] = bus_stop_name[idx]
+                            idx += 1
 
-            if map_data[y + cam_pos[1]][x + cam_pos[0]] == 3:
+            if map_data[y + cam_pos[1]][x + cam_pos[0]] == 3 or map_data[y + cam_pos[1]][x + cam_pos[0]] in bus_stop_name:
                 for i in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-                    if map_data[y + cam_pos[1] + i[1]][x + cam_pos[0] + i[0]] == 3:
+                    if map_data[y + cam_pos[1] + i[1]][x + cam_pos[0] + i[0]] == 3 or map_data[y + cam_pos[1] + i[1]][x + cam_pos[0] + i[0]] in bus_stop_name:
                         pygame.draw.line(
-                            screen,
-                            (0, 255, 0),
+                            screen, green,
                             (x * cell_size + cell_size // 2, y * cell_size + cell_size // 2),
-                            ((x+i[1]) * cell_size + cell_size // 2, (y+i[0]) * cell_size + cell_size // 2),
-                            2
-                            )
+                            (x * cell_size + cell_size // 2 + i[0] * cell_size, y * cell_size + cell_size // 2 + i[1] * cell_size),
+                            1
+                        )
     # Minimap
     for x in range(map_size):
         for y in range(map_size):
